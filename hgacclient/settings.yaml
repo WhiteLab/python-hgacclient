@@ -1,0 +1,12 @@
+---
+# HGAC Client Settings
+
+# Plugins.
+plugins:
+  - add_fastq
+
+# RethinkDB metadata settings.
+rethinkdb:
+  host: changeme
+  port: changeme
+  auth: changeme
