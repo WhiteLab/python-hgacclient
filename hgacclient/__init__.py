@@ -3,7 +3,10 @@ import yaml
 import pkgutil
 import logging
 
-from plugin import *
+import utils
+
+from plugin import plugin
+from plugin import plugins
 
 __PACKAGE = os.path.dirname(__file__)
 

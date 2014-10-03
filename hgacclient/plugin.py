@@ -2,7 +2,7 @@ import logging
 
 plugins = dict()
 
-class plugin(object):
+def plugin(f):
   '''
   A simple plugins decorator.
   Decorator takes a name as input.
@@ -10,25 +10,19 @@ class plugin(object):
   Otherwise, will default to the 'default' namespace.
 
   Example:
-    @plugin('a_func')
+    @plugin
     def a_function():
       ...
 
-    @plugin('test_func','one_namespace','two_namespace')
+    @plugin
     def some_function():
       ...
     
     plugin.plugins
     {
-      'default': {'a_func': <function a_function at ...>},
-      'one_namespace': {'test_func': <function some_function at ...>},
-      'two_namespace': {'test_func': <function some_function at ...>},
+      'a_function': <function a_function at ...>,
+      'some_function': <function some_function at ...>,
     }
   '''
-  def __init__(self,name,*args):
-    self.name = name
-    self.args = args or ['default']
-
-  def __call__(self,f):
-    map(lambda x: plugins.setdefault(x,dict()).update({self.name:f}), self.args)
-    return f
+  plugin.__dict__[f.__name__] = f
+  return f

@@ -9,4 +9,4 @@ plugins:
 rethinkdb:
   host: changeme
   port: changeme
-  auth: changeme
+  auth_key: changeme

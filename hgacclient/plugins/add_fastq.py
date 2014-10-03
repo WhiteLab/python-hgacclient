@@ -6,18 +6,24 @@ import rethinkdb as r
 
 import hgacclient as hgac
 
-def add_fastq(server,fastq,**kwargs):
+@hgac.plugin
+def add_fastq(serv,name,**kwargs):
   '''
   Add a HGAC ID'd FastQ file to the metadata service.
   '''
+  # Find absolute path of file name.
+  name = os.path.abspath(name)
+
   # Parse the HGAC ID from the FastQ file path.
-  hgacid = hgac.util.hgacid(os.path.abspath(fastq))
+  hgacid = hgac.utils.hgacid(name)
 
   # Generate a data packet.
-  data = hgac.groupdict()
+  data = hgacid.groupdict()
   data.update({
-    'filename':os.path.abspath(fastq),
+    'filename': name,
+    'server': serv,
   })
+  logging.debug(data)
 
   # Sync the data packet with the database.
   r.connect(db='metadata',**hgac.settings['rethinkdb']).repl()

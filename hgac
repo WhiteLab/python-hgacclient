@@ -14,9 +14,9 @@ if __name__ == '__main__':
 
   # Adding of FastQ files to metadata server.
   add_fastq = subparser.add_parser('add_fastq',help='Add a FastQ file.')
-  add_fastq.set_defaults(func=hgacclient.add_fastq)
-  add_fastq.add_argument('srvr',help='Server name.')
-  add_fastq.add_argument('file',nargs='+',help='FastQ file(s).')
+  add_fastq.set_defaults(func=hgacclient.plugin.add_fastq)
+  add_fastq.add_argument('serv',help='Server name.')
+  add_fastq.add_argument('name',help='FastQ file.')
   add_fastq.add_argument('-c','--conflict',choices=['error','replace','update'],
                          default='error',help='How to deal with insert conflicts.')
 
@@ -35,6 +35,7 @@ if __name__ == '__main__':
     level = args.loglevel,
     format = '%(asctime)s %(name)-6s %(levelname)-4s %(message)s',
   )
+  logging.info(args)
 
   try: status,retval = 0,args.func(**args.__dict__)
   except Exception as err: status,retval = 1,{'error': str(err)}
