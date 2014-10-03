@@ -1,4 +1,4 @@
-High Throughput Genomics Analysis Core Pipelines
-================================================
+High Throughput Genomics Analysis Core
+======================================
 
 Repository for HGAC-specific processing pipelines.
