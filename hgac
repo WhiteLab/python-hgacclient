@@ -5,7 +5,7 @@ import argparse
 
 import rethinkdb as r
 
-from hgac import utils
+from hgacclient import utils
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Add HGAC ID FastQ to metadata.')
