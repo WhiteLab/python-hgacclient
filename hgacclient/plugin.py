@@ -1,8 +1,12 @@
 import logging
 
-plugins = dict()
+class pluginmeta(type):
+  plugins = dict()
 
-def plugin(f):
+  def __getattr__(cls,key):
+    return cls.plugins[key]
+
+class plugin(object):
   '''
   A simple plugins decorator.
   Decorator takes a name as input.
@@ -10,19 +14,27 @@ def plugin(f):
   Otherwise, will default to the 'default' namespace.
 
   Example:
-    @plugin
+    @plugin('a_func')
     def a_function():
       ...
 
-    @plugin
+    @plugin('test_func','one_namespace','two_namespace')
     def some_function():
       ...
     
     plugin.plugins
     {
-      'a_function': <function a_function at ...>,
-      'some_function': <function some_function at ...>,
+      'default': {'a_func': <function a_function at ...>},
+      'one_namespace': {'test_func': <function some_function at ...>},
+      'two_namespace': {'test_func': <function some_function at ...>},
     }
   '''
-  plugin.__dict__[f.__name__] = f
-  return f
+  __metaclass__ = pluginmeta
+
+  def __init__(self,namespace):
+    self.namespace = namespace
+
+  def __call__(self,f):
+    try: plugin.plugins[self.namespace].append(f)
+    except KeyError: plugin.plugins[self.namespace] = [f]
+    return f

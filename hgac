@@ -10,17 +10,8 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='HGAC Client')
 
   # Generate sub-parsers for each command.
-  subparser = parser.add_subparsers(help='subcommand help')
-
-  # Adding of FastQ files to metadata server.
-  add_fastq = subparser.add_parser('add_fastq',help='Add a FastQ file.')
-  add_fastq.set_defaults(func=hgacclient.plugin.add_fastq)
-  add_fastq.add_argument('serv',help='Server name.')
-  add_fastq.add_argument('name',help='FastQ file.')
-  add_fastq.add_argument('-c','--conflict',choices=['error','replace','update'],
-                         default='error',help='How to deal with insert conflicts.')
-
-  # TODO additional subcommands
+  subparsers = parser.add_subparsers(help='subcommand help')
+  map(lambda add: add(subparsers), hgacclient.plugin.parsers)
 
   # Global optional arguments.
   parser.add_argument('-d','--debug',dest='loglevel',action='store_const',
@@ -29,14 +20,17 @@ if __name__ == '__main__':
   parser.add_argument('-u','--username',help='Authentication username.')
   parser.add_argument('-p','--password',help='Authentication password.')
 
+  # Parse arguments.
   args = parser.parse_args()
 
+  # Set up logging.
   logging.basicConfig(
     level = args.loglevel,
     format = '%(asctime)s %(name)-6s %(levelname)-4s %(message)s',
   )
   logging.info(args)
 
+  # Execute the program, returning status code and a json message.
   try: status,retval = 0,args.func(**args.__dict__)
   except Exception as err: status,retval = 1,{'error': str(err)}
   else: sys.exit(status)

@@ -3,7 +3,7 @@
 
 # Plugins.
 plugins:
-  - add_fastq
+  - fastq
 
 # RethinkDB metadata settings.
 rethinkdb:
